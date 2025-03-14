@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/db";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const sendOTPSchema = z.object({
@@ -9,12 +10,11 @@ const sendOTPSchema = z.object({
   }),
 });
 
-interface SendOTPFormState {
+export interface SendOTPFormState {
   errors: {
     phoneNumber?: string[];
     _form?: string[];
   };
-  success?: boolean;
   phoneNumber: string;
 }
 
@@ -30,7 +30,6 @@ export async function sendOTP(
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,
-      success: false,
       phoneNumber: "",
     };
   }
@@ -70,7 +69,6 @@ export async function sendOTP(
         errors: {
           _form: [err.message],
         },
-        success: false,
         phoneNumber: "",
       };
     } else {
@@ -78,7 +76,6 @@ export async function sendOTP(
         errors: {
           _form: ["Something went wrong!"],
         },
-        success: false,
         phoneNumber: "",
       };
     }
@@ -86,5 +83,8 @@ export async function sendOTP(
 
   // TODO: send otp to phone number via sms
 
-  return { errors: {}, success: true, phoneNumber: result.data.phoneNumber };
+  // redirect to otp verification page
+  redirect("/verify-number");
+
+  // return { errors: {}, success: true, phoneNumber: result.data.phoneNumber };
 }

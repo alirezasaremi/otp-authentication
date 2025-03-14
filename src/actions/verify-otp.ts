@@ -48,7 +48,7 @@ export async function verifyOTP(
       //     ],
       //   },
     });
-    console.log(user);
+    console.log(user?.otp_code, user?.otp_expires);
 
     // TODO: Save JWT token.
 
