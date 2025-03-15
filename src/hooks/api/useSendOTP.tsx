@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { instance } from "@/services/fetcher";
+import { useRouter  } from "next/navigation";
 
 const useSendOTP = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const sendOTP = async (phoneNumber: string) => {
@@ -11,10 +13,16 @@ const useSendOTP = () => {
         phoneNumber,
       })
       .then((response) => {
-        console.log(response.data);
+        if(response.data.data.success){
+          router.push('/verify-number')
+        }
       })
-      .catch((error) => {
-        // console.error(error);
+      .catch((error: any) => {
+        if (error.response) {
+          console.log("Error:", error.response.data.error.phoneNumber[0]);
+        } else {
+          console.error(error.message || "Unexpected Error");
+        }
       })
       .finally(() => {
         setIsLoading(false);

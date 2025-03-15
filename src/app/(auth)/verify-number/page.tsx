@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useActionState } from "react";
+import React from "react";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { verifyOTP } from "@/actions/verify-otp";
 import { Button } from "@/components/ui/button";
 
 const VerifyNumber = () => {
-  const [formState, action] = useActionState(verifyOTP, {
-    errors: {},
-  });
+  const handleConfirmOTP = () => {
+    console.log("handleConfirmOTP");
+  };
 
   return (
     <div className="container bg-slate-100">
@@ -23,7 +22,7 @@ const VerifyNumber = () => {
             Enter verification code
           </h6>
           <form
-            action={action}
+            onSubmit={handleConfirmOTP}
             className="w-full flex flex-col items-center justify-center gap-3"
           >
             <InputOTP maxLength={6} name="otpCode">
@@ -39,18 +38,6 @@ const VerifyNumber = () => {
                 <InputOTPSlot index={5} />
               </InputOTPGroup>
             </InputOTP>
-
-            {formState.errors.otpCode && (
-              <p className="text-rose-500 text-xs text-left mt-1 w-full">
-                {formState.errors.otpCode.join(", ")}
-              </p>
-            )}
-
-            {formState.errors._form && (
-              <p className="text-rose-500 text-xs text-left mt-1 w-full">
-                {formState.errors._form.join(", ")}
-              </p>
-            )}
 
             <Button type="submit" className="mt-2 w-full">
               Login

@@ -18,14 +18,54 @@ export async function POST(req: Request) {
 
     // validation
     if (!result.success) {
-      return NextResponse.json({ error: "Invalid phone number" }, { status: 400 });
-      // return NextResponse.json(
-      //   { error: result.error.flatten().fieldErrors },
-      //   { status: 400 }
-      // );
+      return NextResponse.json(
+        { error: result.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json({ message: result }, { status: 200 });
+    // generate 6-digit otp
+    const otpNumber = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // insert phone number, otp and expire time to database
+    try {
+      // check if user exists
+      const user = await db.user.findFirst({
+        where: { phone_number: result.data.phoneNumber },
+      });
+      if (user) {
+        // user exists, update user
+        await db.user.update({
+          where: { id: user.id },
+          data: {
+            otp_code: otpNumber,
+            otp_expires: new Date(Date.now() + 1 * 60000), // 1 minutes from now
+          },
+        });
+      } else {
+        // user does not exist, create new user
+        await db.user.create({
+          data: {
+            phone_number: result.data.phoneNumber,
+            otp_code: otpNumber,
+            otp_expires: new Date(Date.now() + 1 * 60000), // 1 minutes from now
+          },
+        });
+      }
+      return NextResponse.json(
+        { data: { success: true } },
+        { status: 200 }
+      );
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return NextResponse.json({ error: err.message }, { status: 400 });
+      } else {
+        return NextResponse.json(
+          { error: "Something went wrong!" },
+          { status: 400 }
+        );
+      }
+    }
   } catch (error) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }

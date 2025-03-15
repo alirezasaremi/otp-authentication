@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useActionState, useState } from "react";
-import { sendOTP } from "@/actions/send-otp";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useSendOTP from "@/hooks/api/useSendOTP";
@@ -12,7 +11,7 @@ const Login = () => {
 
   const { isLoading, sendOTP } = useSendOTP();
 
-  const handleSendOTPSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (phoneNumber) {
@@ -28,7 +27,7 @@ const Login = () => {
             Enter your phone number to continue
           </h6>
           <form
-            onSubmit={handleSendOTPSendOTP}
+            onSubmit={handleSendOTP}
             className="w-full flex flex-col items-center justify-center gap-3"
           >
             <Input
