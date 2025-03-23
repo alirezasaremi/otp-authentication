@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -8,10 +8,19 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
+import useVerifyNumber from "@/hooks/api/useVerifyNumber";
+import WaitingButton from "@/components/common/WaitingButton";
+import Link from "next/link";
 
 const VerifyNumber = () => {
-  const handleConfirmOTP = () => {
-    console.log("handleConfirmOTP");
+  const [otpCode, setOTPCode] = useState("");
+  const { isLoading, verifyNumber } = useVerifyNumber();
+
+  const handleConfirmOTP = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (otpCode && otpCode.length === 6) {
+      verifyNumber(otpCode);
+    }
   };
 
   return (
@@ -25,7 +34,11 @@ const VerifyNumber = () => {
             onSubmit={handleConfirmOTP}
             className="w-full flex flex-col items-center justify-center gap-3"
           >
-            <InputOTP maxLength={6} name="otpCode">
+            <InputOTP
+              maxLength={6}
+              name="otpCode"
+              onChangeCapture={(e) => setOTPCode(e.currentTarget.value)}
+            >
               <InputOTPGroup>
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
@@ -40,8 +53,12 @@ const VerifyNumber = () => {
             </InputOTP>
 
             <Button type="submit" className="mt-2 w-full">
-              Login
+              <WaitingButton isLoading={isLoading} label="Login" />
             </Button>
+
+            <Link href="/login" className="text-sky-600 text-sm mt-4">
+              Change Number
+            </Link>
           </form>
         </div>
       </div>

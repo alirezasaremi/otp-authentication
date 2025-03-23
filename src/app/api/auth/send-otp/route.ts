@@ -26,6 +26,7 @@ export async function POST(req: Request) {
 
     // generate 6-digit otp
     const otpNumber = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log("otpNumber", otpNumber);
 
     // insert phone number, otp and expire time to database
     try {
@@ -52,10 +53,18 @@ export async function POST(req: Request) {
           },
         });
       }
-      return NextResponse.json(
+      const response = NextResponse.json(
         { data: { success: true } },
         { status: 200 }
       );
+
+      // Store phone number in httpOnly cookie in bak-end to use it in verify-number page
+      response.headers.set(
+        "Set-Cookie",
+        `phone_number=${result.data.phoneNumber}; HttpOnly; Secure; Path=/; Max-Age=300`
+      ); //5 mins
+
+      return response;
     } catch (err: unknown) {
       if (err instanceof Error) {
         return NextResponse.json({ error: err.message }, { status: 400 });
