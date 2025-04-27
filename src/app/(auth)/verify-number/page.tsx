@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -14,7 +14,7 @@ import Link from "next/link";
 
 const VerifyNumber = () => {
   const [otpCode, setOTPCode] = useState("");
-  const { isLoading, verifyNumber } = useVerifyNumber();
+  const { isLoading, result, verifyNumber } = useVerifyNumber();
 
   const handleConfirmOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +22,12 @@ const VerifyNumber = () => {
       verifyNumber(otpCode);
     }
   };
+
+  useEffect(() => {
+    if(result){
+      console.log(result);
+    }
+  }, [result]);
 
   return (
     <div className="container bg-slate-100">

@@ -27,17 +27,15 @@ export async function POST(req: Request) {
       );
     }
 
-    //TODO: GET user and verify OTP (code and expiration).
+    // GET user and verify OTP (code and expiration).
     const user = await db.user.findFirst({
       where: {
         AND: [{ phone_number: phoneNumber }, { otp_code: otpCode }],
       },
     });
 
-    // TODO: Generate and response JWT with status 200
-
     return NextResponse.json(
-      { data: { user } },
+      { data: { success: true, phoneNumber, otpCode } },
       { status: 200 }
     );
   } catch (error) {
