@@ -2,39 +2,22 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import WaitingButton from "@/components/common/WaitingButton";
+import MobileForm from "@/components/auth/MobileForm";
+import OTPForm from "@/components/auth/OTPForm";
+import { useAuthStore } from "@/store/useAuthStore";
+import { OtpState } from "@/constants/enums";
 
 const Login = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-
-  const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
+  const { step } = useAuthStore((state) => state);
   return (
     <div className="bg-slate-100">
       <div className="flex h-screen items-center justify-center">
         <div className="w-96 min-h-48 mx-auto bg-white shadow-lg rounded-md p-4">
-          <h6 className="font-bold text-stone-700 mb-6 text-center">
-            Enter your phone number to continue
-          </h6>
-          <form
-            onSubmit={handleSendOTP}
-            className="w-full flex flex-col items-center justify-center gap-3"
-          >
-            <Input
-              type="tel"
-              placeholder="Phone Number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-
-            <Button type="submit" className="w-full">
-              {/* <WaitingButton isLoading={isLoading} label="Continue" /> */}
-              Continue
-            </Button>
-          </form>
+          {step === OtpState.SEND && (
+            <MobileForm />
+          )}
+          {step === OtpState.VERIFY && <OTPForm />}
         </div>
       </div>
     </div>
