@@ -1,26 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useSendOTP from "@/hooks/api/useSendOTP";
 import WaitingButton from "@/components/common/WaitingButton";
 
 const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const { isLoading, sendOTP } = useSendOTP();
-
   const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (phoneNumber) {
-      sendOTP(phoneNumber);
-    }
   };
 
   return (
-    <div className="container bg-slate-100">
+    <div className="bg-slate-100">
       <div className="flex h-screen items-center justify-center">
         <div className="w-96 min-h-48 mx-auto bg-white shadow-lg rounded-md p-4">
           <h6 className="font-bold text-stone-700 mb-6 text-center">
@@ -38,7 +31,8 @@ const Login = () => {
             />
 
             <Button type="submit" className="w-full">
-              <WaitingButton isLoading={isLoading} label="Continue" />
+              {/* <WaitingButton isLoading={isLoading} label="Continue" /> */}
+              Continue
             </Button>
           </form>
         </div>

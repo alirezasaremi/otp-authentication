@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -8,29 +8,18 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
-import useVerifyNumber from "@/hooks/api/useVerifyNumber";
 import WaitingButton from "@/components/common/WaitingButton";
 import Link from "next/link";
 
 const VerifyNumber = () => {
   const [otpCode, setOTPCode] = useState("");
-  const { isLoading, result, verifyNumber } = useVerifyNumber();
 
   const handleConfirmOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (otpCode && otpCode.length === 6) {
-      verifyNumber(otpCode);
-    }
   };
 
-  useEffect(() => {
-    if(result){
-      console.log(result);
-    }
-  }, [result]);
-
   return (
-    <div className="container bg-slate-100">
+    <div className="bg-slate-100">
       <div className="flex h-screen items-center justify-center">
         <div className="w-96 min-h-48 mx-auto bg-white shadow-lg rounded-md p-4">
           <h6 className="font-bold text-stone-700 mb-6 text-center">
@@ -59,7 +48,8 @@ const VerifyNumber = () => {
             </InputOTP>
 
             <Button type="submit" className="mt-2 w-full">
-              <WaitingButton isLoading={isLoading} label="Login" />
+              {/* <WaitingButton isLoading={isLoading} label="Login" /> */}
+              Login
             </Button>
 
             <Link href="/login" className="text-sky-600 text-sm mt-4">
