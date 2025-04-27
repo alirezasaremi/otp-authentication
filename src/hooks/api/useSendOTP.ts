@@ -5,12 +5,12 @@ const useSendOTP = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
 
-  const sendOTP = async (phone: string) => {
+  const sendOTP = async (sender: string, type: string) => {
     setIsLoading(true);
     setResponse(null);
 
     await instance
-      .post("/auth/send-otp", { phone })
+      .post("/auth/send-otp", { sender, type })
       .then((res) => {
         setResponse(res.data);
       })

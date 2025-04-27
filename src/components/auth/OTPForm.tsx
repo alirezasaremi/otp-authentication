@@ -11,7 +11,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import useVerifyOTP from "@/hooks/api/useVerifyOTP";
 
 const OTPForm = () => {
-  const { mobile, methodId } = useAuthStore((state) => state);
+  const { sender, methodId } = useAuthStore((state) => state);
   const [otpCode, setOtpCode] = useState("");
 
   const { isLoading, response, verifyOTP } = useVerifyOTP();
@@ -27,7 +27,7 @@ const OTPForm = () => {
     <>
       <h6 className="font-semibold text-stone-600 mb-6 text-center">
         Enter verification code was sent to <br />
-        <span className="font-bold text-black">{mobile}</span>
+        <span className="font-bold text-black">{sender}</span>
       </h6>
       <form
         className="w-full flex flex-col items-center justify-center gap-4"

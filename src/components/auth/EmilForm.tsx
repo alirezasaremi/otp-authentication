@@ -5,18 +5,19 @@ import WaitingButton from "../common/WaitingButton";
 import useSendOTP from "@/hooks/api/useSendOTP";
 import { useAuthStore } from "@/store/useAuthStore";
 import { OtpMethod, OtpState } from "@/constants/enums";
+import { validateEmail } from "@/lib/validation";
 
-const MobileForm = () => {
+const EmailForm = () => {
   const { setStep, setSender, setMethodId } = useAuthStore((state) => state);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
 
   const { isLoading, response, sendOTP } = useSendOTP();
 
   const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (phoneNumber && phoneNumber.length === 11) {
-      setSender(phoneNumber);
-      sendOTP(phoneNumber, OtpMethod.MOBILE);
+    if (email && validateEmail(email)) {
+      setSender(email);
+      sendOTP(email, OtpMethod.EMAIL);
     }
   };
 
@@ -30,25 +31,23 @@ const MobileForm = () => {
   return (
     <>
       <h6 className="font-bold text-stone-700 mb-6 text-center">
-        Enter your phone number to continue
+        Enter your email to continue
       </h6>
       <form
         className="w-full flex flex-col items-center justify-center gap-3"
         onSubmit={handleSendOTP}
       >
         <Input
-          type="tel"
-          maxLength={11}
-          minLength={11}
-          placeholder="Phone Number"
-          value={phoneNumber}
+          type="email"
+          placeholder="Email"
+          value={email}
           required
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <Button
           type="submit"
           className="w-full"
-          disabled={isLoading || !phoneNumber || phoneNumber.length !== 11}
+          disabled={isLoading || !email || !validateEmail(email)}
         >
           <WaitingButton isLoading={isLoading} label="Continue" />
         </Button>
@@ -57,4 +56,4 @@ const MobileForm = () => {
   );
 };
 
-export default MobileForm;
+export default EmailForm;
