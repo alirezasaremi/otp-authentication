@@ -1,6 +1,6 @@
-import { Site } from "@/constants/enums";
+
+import { createCookie } from "@/lib/server/session";
 import { stytch } from "@/lib/stytch";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -15,13 +15,7 @@ export async function POST(req: Request) {
       session_duration_minutes: 60,
     });
 
-    (await cookies()).set(Site.TOKEN, response.session_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
-      });
+    createCookie(response.session_token);
 
     return NextResponse.json({
       success: true,

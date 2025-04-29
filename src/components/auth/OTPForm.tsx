@@ -9,17 +9,27 @@ import {
 } from "../ui/input-otp";
 import { useAuthStore } from "@/store/useAuthStore";
 import useVerifyOTP from "@/hooks/api/useVerifyOTP";
+import { OtpMethod } from "@/constants/enums";
+import useVerifyCustomOTP from "@/hooks/api/useVerifyCustomOTP";
 
 const OTPForm = () => {
-  const { sender, methodId } = useAuthStore((state) => state);
+  const { sender, methodId, defaultMethod } = useAuthStore((state) => state);
   const [otpCode, setOtpCode] = useState("");
 
   const { isLoading, verifyOTP } = useVerifyOTP();
+  const { loading, verifyCustomOTP } = useVerifyCustomOTP();
 
-  const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleVerifyOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (otpCode && otpCode.length === 6 && methodId) {
       verifyOTP(otpCode, methodId);
+    }
+  };
+
+  const handleVerifyCustomOTP = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (otpCode && otpCode.length === 6) {
+      verifyCustomOTP(otpCode);
     }
   };
 
@@ -31,7 +41,11 @@ const OTPForm = () => {
       </h6>
       <form
         className="w-full flex flex-col items-center justify-center gap-4"
-        onSubmit={handleSendOTP}
+        onSubmit={
+          defaultMethod === OtpMethod.CUSTOM_SMS
+            ? handleVerifyCustomOTP
+            : handleVerifyOTP
+        }
       >
         <InputOTP
           maxLength={6}
@@ -53,9 +67,9 @@ const OTPForm = () => {
         <Button
           type="submit"
           className="w-full"
-          disabled={isLoading || !otpCode || otpCode.length !== 6}
+          disabled={isLoading || loading || !otpCode || otpCode.length !== 6}
         >
-          <WaitingButton isLoading={isLoading} label="Login" />
+          <WaitingButton isLoading={isLoading || loading} label="Login" />
         </Button>
       </form>
     </>

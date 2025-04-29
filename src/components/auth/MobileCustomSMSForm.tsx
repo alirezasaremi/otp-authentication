@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import WaitingButton from "../common/WaitingButton";
-import useSendOTP from "@/hooks/api/useSendOTP";
 import { useAuthStore } from "@/store/useAuthStore";
 import { OtpMethod, OtpState } from "@/constants/enums";
+import useSendCustomOTP from "@/hooks/api/useSendCustomOTP";
 
 const MobileCustomSMSForm = () => {
-  const { setStep, setSender, setMethodId } = useAuthStore((state) => state);
+  const { setStep, setSender } = useAuthStore((state) => state);
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const { isLoading, response, sendOTP } = useSendOTP();
+  const { isLoading, response, sendOTP } = useSendCustomOTP();
 
   const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ const MobileCustomSMSForm = () => {
   useEffect(() => {
     if (response) {
       setStep(OtpState.VERIFY);
-      setMethodId(response.data.otp.phone_id);
+      console.log(response);
     }
   }, [response]);
 

@@ -1,18 +1,20 @@
 import { instance } from "@/services/fetcher";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const useVerifyOTP = () => {
+const useVerifyCustomOTP = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const { sender } = useAuthStore((state) => state);
+  const [loading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
 
-  const verifyOTP = async (code: string, method_id?: string) => {
+  const verifyCustomOTP = async (code: string) => {
     setIsLoading(true);
     setResponse(null);
 
     await instance
-      .post("/auth/verify-otp", { code, method_id })
+      .post("/auth/verify-custom-otp", { code, phone: sender })
       .then((res) => {
         setResponse(res.data);
         router.push("/dashboard");
@@ -25,7 +27,7 @@ const useVerifyOTP = () => {
       });
   };
 
-  return { isLoading, response, verifyOTP };
+  return { loading, response, verifyCustomOTP };
 };
 
-export default useVerifyOTP;
+export default useVerifyCustomOTP;
