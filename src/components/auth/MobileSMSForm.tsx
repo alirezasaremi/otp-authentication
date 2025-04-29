@@ -6,7 +6,7 @@ import useSendOTP from "@/hooks/api/useSendOTP";
 import { useAuthStore } from "@/store/useAuthStore";
 import { OtpMethod, OtpState } from "@/constants/enums";
 
-const MobileForm = () => {
+const MobileSMSForm = () => {
   const { setStep, setSender, setMethodId } = useAuthStore((state) => state);
   const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -14,7 +14,7 @@ const MobileForm = () => {
 
   const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (phoneNumber && phoneNumber.length === 11) {
+    if (phoneNumber) {
       setSender(phoneNumber);
       sendOTP(phoneNumber, OtpMethod.SMS);
     }
@@ -23,7 +23,7 @@ const MobileForm = () => {
   useEffect(() => {
     if (response) {
       setStep(OtpState.VERIFY);
-      setMethodId(response.data.otp.email_id);
+      setMethodId(response.data.otp.phone_id);
     }
   }, [response]);
 
@@ -38,8 +38,6 @@ const MobileForm = () => {
       >
         <Input
           type="tel"
-          maxLength={11}
-          minLength={11}
           placeholder="Phone Number"
           value={phoneNumber}
           required
@@ -48,7 +46,7 @@ const MobileForm = () => {
         <Button
           type="submit"
           className="w-full"
-          disabled={isLoading || !phoneNumber || phoneNumber.length !== 11}
+          disabled={isLoading || !phoneNumber}
         >
           <WaitingButton isLoading={isLoading} label="Continue" />
         </Button>
@@ -57,4 +55,4 @@ const MobileForm = () => {
   );
 };
 
-export default MobileForm;
+export default MobileSMSForm;

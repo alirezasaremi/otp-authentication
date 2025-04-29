@@ -8,6 +8,7 @@ export enum OtpState {
 }
 
 export enum OtpMethod {
-  MOBILE = "mobile",
-  EMAIL = "email"
+  EMAIL = "email",
+  CUSTOM_SMS = "custom_sms",
+  SMS = "sms",
 }

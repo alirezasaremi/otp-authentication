@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       otp = await stytch.otps.email.loginOrCreate({
         email: sender,
       });
-    } else if (type === OtpMethod.MOBILE) {
+    } else if (type === OtpMethod.SMS) {
       otp = await stytch.otps.sms.loginOrCreate({
         phone_number: sender,
       });

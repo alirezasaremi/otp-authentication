@@ -118,4 +118,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  a {
+    @apply text-sky-600 hover:underline;
+  }
 }
