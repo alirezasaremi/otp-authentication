@@ -2,20 +2,20 @@ import { instance } from "@/services/fetcher";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const useVerifyOTP = () => {
+const useLogout = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
 
-  const verifyOTP = async (code: string, method_id: string) => {
+  const logout = async () => {
     setIsLoading(true);
     setResponse(null);
 
     await instance
-      .post("/auth/verify-otp", { code, method_id })
+      .post("/auth/logout", {})
       .then((res) => {
         setResponse(res.data);
-        router.push('/dashboard');
+        router.push("/login");
       })
       .catch((err) => {
         console.error(err.response.data);
@@ -25,7 +25,7 @@ const useVerifyOTP = () => {
       });
   };
 
-  return { isLoading, response, verifyOTP };
+  return { isLoading, response, logout };
 };
 
-export default useVerifyOTP;
+export default useLogout;

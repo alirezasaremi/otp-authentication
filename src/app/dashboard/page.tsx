@@ -1,16 +1,13 @@
-'use client';
+"use client";
 
+import WaitingButton from "@/components/common/WaitingButton";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import useLogout from "@/hooks/api/useLogout";
 import React from "react";
 
 const Dashboard = () => {
-  const router = useRouter();
 
-  async function handleLogout() {
-    await fetch("/api/logout", { method: "POST" });
-    router.push("/login");
-  }
+  const { isLoading, logout } = useLogout();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -20,9 +17,9 @@ const Dashboard = () => {
         type="button"
         variant="destructive"
         className="mt-4"
-        onClick={handleLogout}
+        onClick={logout}
       >
-        Logout
+        <WaitingButton isLoading={isLoading} label="Logout" />
       </Button>
     </div>
   );

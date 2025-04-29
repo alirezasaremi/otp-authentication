@@ -4,6 +4,7 @@ import { stytch } from "@/lib/stytch";
 import { Site } from "@/constants/enums";
 
 export async function POST(req: NextRequest) {
+  
   const cookieStore = await cookies();
   const session_token = cookieStore.get(Site.TOKEN)?.value;
 

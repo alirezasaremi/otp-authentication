@@ -14,7 +14,7 @@ const OTPForm = () => {
   const { sender, methodId } = useAuthStore((state) => state);
   const [otpCode, setOtpCode] = useState("");
 
-  const { isLoading, response, verifyOTP } = useVerifyOTP();
+  const { isLoading, verifyOTP } = useVerifyOTP();
 
   const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
